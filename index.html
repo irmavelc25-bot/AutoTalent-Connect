@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AutoTalent Connect</title>
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#eef3f8;
+    font-family:Arial, sans-serif;
+}
+
+
+.container{
+
+    width:900px;
+    height:90vh;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+
+}
+
+
+.header{
+
+    background:#0D47A1;
+    color:white;
+    text-align:center;
+    padding:20px;
+
+}
+
+
+.header h1{
+
+    margin:0;
+    font-size:30px;
+
+}
+
+
+.chat{
+
+    flex:1;
+    padding:25px;
+    background:#f7f9fb;
+    overflow-y:auto;
+
+}
+
+
+.message{
+
+    display:flex;
+    margin-bottom:20px;
+
+}
+
+
+.avatar{
+
+    font-size:35px;
+    margin-right:15px;
+
+}
+
+
+.bot{
+
+    background:white;
+    padding:18px;
+    border-radius:15px;
+    max-width:70%;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+    line-height:1.5;
+
+}
+
+
+.footer{
+
+    padding:20px;
+    text-align:center;
+
+}
+
+
+button{
+
+    background:#1565C0;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:10px;
+    font-size:17px;
+    cursor:pointer;
+
+}
+
+
+button:hover{
+
+    background:#0D47A1;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="header">
+
+<h1>🚗 AutoParts México</h1>
+
+<p>AutoTalent Connect - Reclutamiento 5.0</p>
+
+</div>
+
+
+
+<div class="chat">
+
+
+<div class="message">
+
+
+<div class="avatar">
+🤖
+</div>
+
+
+<div class="bot">
+
+
+<b>Hola, soy AutoTalent AI.</b>
+
+<br><br>
+
+Te ayudaré durante el proceso de selección para la vacante:
+
+<br><br>
+
+<b>Supervisor de Producción</b>
+
+<br><br>
+
+Esta entrevista tomará aproximadamente 2 minutos.
+
+<br><br>
+
+Presiona el botón para comenzar.
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<
+<div class="footer" id="footer">
+
+
+<button onclick="iniciarChat()">
+
+Comenzar entrevista
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let preguntaActual = 0;
+
+let candidato = {};
+
+const preguntas = [
+
+{
+campo:"nombre",
+texto:"👋 Para comenzar, ¿cuál es tu nombre completo?",
+tipo:"text"
+},
+
+{
+campo:"correo",
+texto:"📧 ¿Cuál es tu correo electrónico?",
+tipo:"email"
+},
+
+{
+campo:"escolaridad",
+texto:"🎓 ¿Cuál es tu nivel de estudios?",
+tipo:"select",
+opciones:[
+"Preparatoria",
+"Técnico especializado",
+"Licenciatura",
+"Ingeniería",
+"Posgrado"
+]
+},
+{
+campo:"experiencia",
+texto:"🏭 ¿Cuántos años tienes de experiencia supervisando producción?",
+tipo:"select",
+opciones:[
+"Menos de 1 año",
+"1 a 3 años",
+"3 a 5 años",
+"Más de 5 años"
+]
+},
+
+{
+campo:"automotriz",
+texto:"🚗 ¿Tienes experiencia en industria automotriz?",
+tipo:"select",
+opciones:[
+"Sí",
+"No"
+]
+},
+
+{
+campo:"conocimientos",
+texto:"⚙️ ¿Qué herramientas conoces?",
+tipo:"select",
+opciones:[
+"Lean Manufacturing",
+"5S",
+"Kaizen",
+"KPI",
+"IATF 16949"
+]
+},
+
+{
+campo:"ingles",
+texto:"🌎 ¿Cuál es tu nivel de inglés?",
+tipo:"select",
+opciones:[
+"Básico",
+"Intermedio",
+"Avanzado"
+]
+},
+
+{
+campo:"liderazgo",
+texto:"👥 ¿Cuál consideras que es tu principal fortaleza?",
+tipo:"select",
+opciones:[
+"Liderazgo",
+"Trabajo en equipo",
+"Resolución de problemas",
+"Comunicación"
+]
+},
+
+{
+campo:"turnos",
+texto:"⏰ ¿Tienes disponibilidad para rotar turnos?",
+tipo:"select",
+opciones:[
+"Sí",
+"No"
+]
+},
+
+{
+campo:"motivacion",
+texto:"⭐ ¿Por qué te gustaría trabajar en AutoParts México?",
+tipo:"text"
+}
+
+];
+
+
+function iniciarChat(){
+
+document.getElementById("footer").innerHTML="";
+
+mostrarPregunta();
+
+}
+
+
+
+function mostrarPregunta(){
+
+let chat=document.querySelector(".chat");
+
+let pregunta=preguntas[preguntaActual];
+
+
+let respuestaHTML="";
+
+
+if(pregunta.tipo=="select"){
+
+
+respuestaHTML=`
+
+<select id="respuesta">
+
+${pregunta.opciones.map(x=>`
+
+<option>${x}</option>
+
+`).join("")}
+
+</select>
+
+`;
+
+
+}else{
+
+
+respuestaHTML=`
+
+<input id="respuesta"
+type="${pregunta.tipo}"
+placeholder="Escribe tu respuesta"
+value="">
+
+`;
+
+}
+
+
+chat.innerHTML="";
+ 
+chat.innerHTML+=`
+
+<div class="message">
+
+<div class="avatar">
+🤖
+</div>
+
+<div class="bot">
+
+${pregunta.texto}
+
+<br><br>
+
+${respuestaHTML}
+
+<br><br>
+
+<button onclick="guardarRespuesta()">
+
+Continuar →
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+
+
+function guardarRespuesta(){
+
+let campos = document.querySelectorAll("#respuesta");
+
+let respuesta = campos[campos.length - 1].value.trim();
+
+if(respuesta==""){
+
+alert("Completa la respuesta");
+
+return;
+
+}
+
+
+candidato[preguntas[preguntaActual].campo]=respuesta;
+
+
+document.querySelector(".chat").innerHTML+=`
+
+<div class="message" style="justify-content:flex-end">
+
+<div class="bot" style="background:#1565C0;color:white">
+
+${respuesta}
+
+</div>
+
+</div>
+
+`;
+
+
+preguntaActual++;
+
+
+if(preguntaActual<preguntas.length){
+
+setTimeout(()=>{
+
+mostrarPregunta();
+
+},700);
+
+
+}else{
+
+finalizar();
+
+}
+
+
+}
+
+
+
+function finalizar(){
+
+
+document.querySelector(".chat").innerHTML+=`
+
+<div class="message">
+
+<div class="avatar">
+🤖
+</div>
+
+<div class="bot">
+
+🎉 Entrevista completada.
+
+<br><br>
+
+Gracias por participar en el proceso de selección.
+
+<br><br>
+
+AutoTalent AI analizará tu perfil.
+
+</div>
+
+</div>
+
+`;
+
+
+console.log(candidato);
+
+guardarCandidato(candidato);
+
+}
+
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="firebase-config.js"></script>
+
+<script src="guardar-candidato.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Panel AutoTalent AI</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef3f8;
+padding:30px;
+}
+
+h1{
+text-align:center;
+color:#0D47A1;
+}
+
+table{
+width:100%;
+background:white;
+border-collapse:collapse;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+th{
+background:#1565C0;
+color:white;
+padding:12px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>🚗 AutoTalent AI - Candidatos</h1>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Nombre</th>
+<th>Correo</th>
+<th>Escolaridad</th>
+<th>Experiencia</th>
+<th>Inglés</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tablaCandidatos">
+
+
+</tbody>
+
+
+</table>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="firebase-config.js"></script>
+
+<script>
+
+const tabla = document.getElementById("tablaCandidatos");
+
+
+db.collection("candidatos").get().then((querySnapshot)=>{
+
+
+    querySnapshot.forEach((doc)=>{
+
+
+        const candidato = doc.data();
+
+
+        tabla.innerHTML += `
+
+        <tr>
+
+        <td>${candidato.nombre || ""}</td>
+
+        <td>${candidato.correo || ""}</td>
+
+        <td>${candidato.escolaridad || ""}</td>
+
+        <td>${candidato.experiencia || ""}</td>
+
+        <td>${candidato.ingles || ""}</td>
+
+        </tr>
+
+        `;
+
+
+    });
+
+
+}).catch((error)=>{
+
+console.log("Error al cargar candidatos:", error);
+
+});
+
+
+</script>
+</body>
+
+</html>
